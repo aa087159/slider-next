@@ -13,6 +13,12 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      content: {
+        affirmIcon: 'url("/public/svgs/affirm.svg")',
+      },
+      boxShadow: {
+        md: "0px 1px 3px 3px #eee",
+      },
     },
   },
   plugins: [],

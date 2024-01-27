@@ -2,32 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.slider-buttons button:hover svg {
+  fill: #fff;
+}
+.slider-buttons button:disabled svg {
+  fill: #cccccc;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/*carousel*/
+.slider {
+  display: flex;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  width: 100%;
+  gap: 12px;
+  justify-content: space-between;
+  overflow-x: auto;
+  padding: 5px;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.slider::-webkit-scrollbar {
+  width: 0;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.pagination-indicator {
+  line-height: 20px;
+  opacity: 1;
+  width: 20px;
+  height: 4px;
+  background-color: #dcdcdc;
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.pagination-indicator.active {
+  background-color: red;
 }
