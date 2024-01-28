@@ -1,3 +1,22 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "next/core-web-vitals"
+  ],
+
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "prefer-const": "warn",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-empty-interface": "off",
+    "no-empty-pattern": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/prefer-as-const": "off",
+    "no-extra-boolean-cast": "off",
+    "@typescript-eslint/no-unused-vars": "warn"
+  }
 }

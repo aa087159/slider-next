@@ -2,6 +2,7 @@ import React from "react";
 import { format } from "date-fns";
 import { isTabletOrMobileQuery } from "../utils";
 import { useMediaQuery } from "react-responsive";
+import Image from "next/image";
 
 export interface SlideDataType {
   title: string;
@@ -37,7 +38,7 @@ export default function Slide({
     >
       <div className="relative bg-white flex flex-col justify-center gap-2 p-5 overflow-hidden whitespace-nowrap rounded-t-lg">
         <span className="absolute left-5 top-6 w-[70px]">
-          <img
+          <Image
             alt={is_prebuilt ? "prebuild" : "custom"}
             loading="lazy"
             width="70"
@@ -50,7 +51,7 @@ export default function Slide({
           />
         </span>
         <div className="relative flex justify-center mt-4">
-          <img
+          <Image
             alt={title}
             loading="lazy"
             width="200"

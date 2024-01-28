@@ -4,11 +4,13 @@ import { slides } from "../utils";
 type Props = {
   activeIndex: number;
   setActiveIndex: React.Dispatch<React.SetStateAction<number>>;
+  setSliderScrolling: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function SwiperPagination({
   activeIndex,
   setActiveIndex,
+  setSliderScrolling,
 }: Props) {
   return (
     <div className="flex gap-2 justify-center transition-all">
@@ -18,7 +20,10 @@ export default function SwiperPagination({
           className={`pagination-indicator ${
             activeIndex === i ? "active" : ""
           }`}
-          onClick={() => setActiveIndex(i)}
+          onClick={() => {
+            setSliderScrolling(true);
+            setActiveIndex(i);
+          }}
         ></span>
       ))}
     </div>

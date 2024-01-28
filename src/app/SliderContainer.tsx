@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Slider from "./Slider";
 import SliderButtons from "./SliderButtons";
 import { useMediaQuery } from "react-responsive";
@@ -10,8 +10,9 @@ import SwiperPagination from "./components/SwiperPagination";
 type Props = {};
 
 function SliderContainer({}: Props) {
-  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const isTabletOrMobile = useMediaQuery(isTabletOrMobileQuery);
+  const [sliderScrolling, setSliderScrolling] = useState(false);
 
   return (
     <div className="mx-auto max-w-[1500px] ">
@@ -26,11 +27,17 @@ function SliderContainer({}: Props) {
           />
         )}
       </div>
-      <Slider activeIndex={activeIndex} setActiveIndex={setActiveIndex} />
+      <Slider
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+        sliderScrolling={sliderScrolling}
+        setSliderScrolling={setSliderScrolling}
+      />
       {isTabletOrMobile && (
         <SwiperPagination
           activeIndex={activeIndex}
           setActiveIndex={setActiveIndex}
+          setSliderScrolling={setSliderScrolling}
         />
       )}
     </div>

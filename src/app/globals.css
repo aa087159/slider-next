@@ -34,7 +34,7 @@
   border-radius: 5px;
   display: inline-block;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease;
 }
 
 .pagination-indicator.active {
