@@ -41,8 +41,9 @@ export default function Slide({
           <Image
             alt={is_prebuilt ? "prebuild" : "custom"}
             loading="lazy"
-            width="70"
-            height="22"
+            height={0}
+            width={0}
+            style={{ width: "70px", height: "22" }}
             decoding="async"
             data-nimg="1"
             src={
@@ -53,12 +54,12 @@ export default function Slide({
         <div className="relative flex justify-center mt-4">
           <Image
             alt={title}
-            loading="lazy"
             width="200"
             height="200"
             decoding="async"
             data-nimg="1"
             src={img_url}
+            priority={true}
           />
         </div>
 
