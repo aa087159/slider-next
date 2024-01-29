@@ -25,47 +25,48 @@ function Slider({
   const gap = 12;
 
   useEffect(() => {
-    if (sliderRef.current) {
-      if (sliderScrolling) {
+    const scroll = () => {
+      if (sliderRef.current) {
         sliderRef.current.scrollTo({
           left: (363 + gap) * activeIndex,
         });
-
-        setSliderScrolling(false);
       }
+    };
+
+    if ((isTabletOrMobile && sliderScrolling) || !isTabletOrMobile) {
+      scroll();
     }
-  }, [activeIndex, setSliderScrolling, sliderScrolling]);
+  }, [activeIndex, isTabletOrMobile, sliderScrolling]);
 
-  const scrollObserver = useCallback(() => {
-    const slider = sliderRef.current;
-    if (slider && isTabletOrMobile) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && !sliderScrolling) {
-              const index = Array.from(slider.children).indexOf(entry.target);
-              setActiveIndex(index);
-            }
-          });
-        },
-        {
-          root: slider,
-          rootMargin: "0px 20px 0px 20px",
-          threshold: [0, 0.25, 0.5, 0.75, 1],
-        }
-      );
-
-      if (slider) {
-        Array.from(slider.children).forEach((child) => {
-          observer.observe(child);
+  const observer = useCallback(() => {
+    return new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !sliderScrolling) {
+            const index = Array.from(sliderRef.current!.children).indexOf(
+              entry.target
+            );
+            setActiveIndex(index);
+          }
         });
+      },
+      {
+        root: sliderRef.current,
+        threshold: 0.8,
       }
-    }
-  }, [isTabletOrMobile, setActiveIndex, sliderScrolling]);
+    );
+  }, [setActiveIndex, sliderScrolling]);
 
   useEffect(() => {
-    scrollObserver();
-  }, [scrollObserver]);
+    const observerInstance = observer();
+    if (isTabletOrMobile && sliderRef.current) {
+      Array.from(sliderRef.current.children).forEach((child) => {
+        observerInstance.observe(child);
+      });
+    }
+
+    return () => observerInstance.disconnect();
+  }, [isTabletOrMobile, observer]);
 
   const actionStart = (e: React.MouseEvent) => {
     setIsDrag(true);
@@ -96,9 +97,13 @@ function Slider({
       onMouseDown={actionStart}
       onMouseMove={actionMove}
       onMouseUp={() => setIsDrag(false)}
-      // onTouchStart={actionStart}
-      // onTouchMove={actionMove}
-      // onTouchEnd={() => setIsDrag(false)}
+      onScroll={() => {
+        if (sliderRef.current) {
+          if (sliderRef.current.scrollLeft - (363 + gap) * activeIndex === 17) {
+            setSliderScrolling(false);
+          }
+        }
+      }}
     >
       {slides.map((slide, i) => (
         <Slide {...{ ...slide }} key={i} />
