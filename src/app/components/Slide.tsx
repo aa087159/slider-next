@@ -95,12 +95,6 @@ export default function Slide({
               Starting at
               <span className="text-[#1694f5] "> ${affirm_price}/mo </span>with
             </p>
-            {/* <img
-              className="max-w-[50px]"
-              src="/svgs/affirm.svg"
-              height="300"
-              width="423"
-            /> */}
           </button>
         </div>
 

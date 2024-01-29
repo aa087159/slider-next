@@ -33,6 +33,7 @@ function Slider({
       }
     };
 
+    //use sliderScrolling to block out observer temporarily
     if ((isTabletOrMobile && sliderScrolling) || !isTabletOrMobile) {
       scroll();
     }
@@ -83,7 +84,12 @@ function Slider({
       const dist = x - startX;
       sliderRef.current.scrollLeft = scrollLeft - dist;
 
-      //setActiveIndex(Math.floor(diff / (363 + gap)));
+      setActiveIndex(
+        Math.floor(
+          (sliderRef.current.scrollLeft / ((slides.length - 4) * (363 + gap))) *
+            slides.length
+        )
+      );
     }
   };
 
@@ -98,7 +104,8 @@ function Slider({
       onMouseMove={actionMove}
       onMouseUp={() => setIsDrag(false)}
       onScroll={() => {
-        if (sliderRef.current) {
+        //if pagination scrolling finished, unblock observer
+        if (sliderRef.current && sliderScrolling) {
           if (sliderRef.current.scrollLeft - (363 + gap) * activeIndex === 17) {
             setSliderScrolling(false);
           }
