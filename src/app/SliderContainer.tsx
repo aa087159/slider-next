@@ -24,6 +24,7 @@ function SliderContainer({}: Props) {
           <SliderButtons
             activeIndex={activeIndex}
             setActiveIndex={setActiveIndex}
+            setSliderScrolling={setSliderScrolling}
           />
         )}
       </div>

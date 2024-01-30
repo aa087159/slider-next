@@ -34,20 +34,36 @@ function Slider({
     };
 
     //use sliderScrolling to block out observer temporarily
-    if ((isTabletOrMobile && sliderScrolling) || !isTabletOrMobile) {
+    if (sliderScrolling) {
       scroll();
     }
-  }, [activeIndex, isTabletOrMobile, sliderScrolling]);
+  }, [activeIndex, sliderScrolling]);
 
   const observer = useCallback(() => {
     return new IntersectionObserver(
       (entries) => {
+        const map: number[] = [];
         entries.forEach((entry) => {
+          const index = Array.from(sliderRef.current!.children).indexOf(
+            entry.target
+          );
+          if (
+            isTabletOrMobile &&
+            entry.isIntersecting &&
+            sliderScrolling &&
+            index === activeIndex
+          ) {
+            setSliderScrolling(false);
+          }
           if (entry.isIntersecting && !sliderScrolling) {
-            const index = Array.from(sliderRef.current!.children).indexOf(
-              entry.target
-            );
-            setActiveIndex(index);
+            if (isTabletOrMobile) {
+              setActiveIndex(index);
+            } else {
+              map.push(index);
+              if (map.length > 0) {
+                setActiveIndex(map[0]);
+              }
+            }
           }
         });
       },
@@ -56,18 +72,24 @@ function Slider({
         threshold: 0.8,
       }
     );
-  }, [setActiveIndex, sliderScrolling]);
+  }, [
+    activeIndex,
+    isTabletOrMobile,
+    setActiveIndex,
+    setSliderScrolling,
+    sliderScrolling,
+  ]);
 
   useEffect(() => {
     const observerInstance = observer();
-    if (isTabletOrMobile && sliderRef.current) {
+    if (sliderRef.current) {
       Array.from(sliderRef.current.children).forEach((child) => {
         observerInstance.observe(child);
       });
     }
 
     return () => observerInstance.disconnect();
-  }, [isTabletOrMobile, observer]);
+  }, [observer]);
 
   const actionStart = (e: React.MouseEvent) => {
     setIsDrag(true);
@@ -84,12 +106,12 @@ function Slider({
       const dist = x - startX;
       sliderRef.current.scrollLeft = scrollLeft - dist;
 
-      setActiveIndex(
-        Math.floor(
-          (sliderRef.current.scrollLeft / ((slides.length - 4) * (363 + gap))) *
-            slides.length
-        )
-      );
+      // setActiveIndex(
+      //   Math.floor(
+      //     (sliderRef.current.scrollLeft / ((slides.length - 4) * (363 + gap))) *
+      //       slides.length
+      //   )
+      // );
     }
   };
 
@@ -105,10 +127,13 @@ function Slider({
       onMouseUp={() => setIsDrag(false)}
       onScroll={() => {
         //if pagination scrolling finished, unblock observer
-        if (sliderRef.current && sliderScrolling) {
-          if (sliderRef.current.scrollLeft - (363 + gap) * activeIndex === 17) {
-            setSliderScrolling(false);
-          }
+        if (
+          sliderRef.current &&
+          sliderScrolling &&
+          !isTabletOrMobile &&
+          (363 + gap) * activeIndex - sliderRef.current.scrollLeft < 5
+        ) {
+          setSliderScrolling(false);
         }
       }}
     >
